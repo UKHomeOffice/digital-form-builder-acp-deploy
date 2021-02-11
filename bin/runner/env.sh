@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 [[ -z "${DEBUG}" ]] || set -x
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo $DIR
 source ${DIR}/util.sh || exit 1
 source ${DIR}/env.sh || exit 1
 
