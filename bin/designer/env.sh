@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 [[ -z "${DEBUG}" ]] || set -x
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source ${DIR}/../util.sh || exit 1
+source /drone/src/bin/util.sh || exit 1
 source ${DIR}/env.sh || exit 1
 info "---"
 info "Kube Environment: ${DRONE_DEPLOY_TO}"
