@@ -2,8 +2,8 @@
 [[ -z "${DEBUG}" ]] || set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source ${DIR}/util.sh || exit 1
-source ${DIR}/env.sh || exit 1
+source ${DIR}/designer/util.sh || exit 1
+source ${DIR}/designer/env.sh || exit 1
 env
 info "---"
 info "Kube Environment: ${DRONE_DEPLOY_TO}"
