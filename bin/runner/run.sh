@@ -9,6 +9,8 @@ info "Kube Environment: ${DRONE_DEPLOY_TO}"
 info "Kube API URL: ${KUBE_SERVER}"
 info "Kube Namespace: ${KUBE_NAMESPACE}"
 info "App Release Version: ${APP_VERSION}"
+info "PARENT JOB NUMBER: ${DRONE_BUILD_PARENT}"
+info "XGOV TAG: ${XGOV_TAG}"
 info "---"
 
 case ${ACTION} in
