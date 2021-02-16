@@ -2,7 +2,6 @@
 [[ -z "${DEBUG}" ]] || set -x
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source /drone/src/bin/util.sh || exit 1
-ls -lah /drone/src/bin/runner
 source /drone/src/bin/runner/env.sh || exit 1
 
 info "---"
