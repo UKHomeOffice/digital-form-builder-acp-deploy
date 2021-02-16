@@ -49,7 +49,7 @@ spec:
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /
+              path: /health-check
               port: 3000
               scheme: HTTP
             initialDelaySeconds: 5
@@ -154,60 +154,3 @@ spec:
         - name: bundle
         configMap:
           name: bundle
----
-kind: pipeline
-name: smoke-tests
-type: kubernetes
-
-trigger:
-  branch: main
-  event:
-    - push
-    - tag
-steps:
-  - name: clone xgov
-    image: alpine/git
-    commands:
-      - bin/env.sh
-      - source .env && echo "XXXX $${XGOV_SHA} $${BASE_IMAGE_APP_SHA}"
-      - env
-      - git clone https://github.com/XGovFormBuilder/digital-form-builder/
-      - cd digital-form-builder
-      - git checkout $${XGOV_SHA}
-  # find cached node_modules by the file 'yarn.lock'
-  - name: load-yarn-cache
-    image: sinlead/drone-cache:1.0.0
-    settings:
-      action: load
-      key: yarn.lock
-      mount: node_modules
-      prefix: yarn-modules-v1
-    volumes:
-      - name: cache
-        path: /cache
-  - name: yarn-install
-    image: node:11-alpine
-    commands:
-      - source .env && echo "XXXX $${XGOV_SHA}"
-      - env
-      - git clone https://github.com/XGovFormBuilder/digital-form-builder/
-      - cd digital-form-builder
-      - git checkout $${XGOV_SHA}
-      - yarn
-      - yarn build:dependencies
-  # save installed node_modules to cache
-  - name: save-yarn-cache
-    image: sinlead/drone-cache:1.0.0
-    settings:
-      action: save
-      key: yarn.lock
-      mount: node_modules
-      prefix: yarn-modules-v1
-    volumes:
-      - name: cache
-        path: /cache
-depends_on:
-  - designer
-volumes:
-  - name: cache
-    path: /tmp/cache
