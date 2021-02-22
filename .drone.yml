@@ -12,7 +12,7 @@ steps:
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
     commands:
-      - echo "$XGOV_TAG"
+      - echo ${XGOV_TAG}
   # - name: deploy-runner
   #   pull: if-not-exists
   #   image: quay.io/ukhomeofficedigital/kd:v1.16.0
