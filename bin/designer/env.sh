@@ -23,7 +23,7 @@ case ${DRONE_DEPLOY_TO} in
 
     case ${KUBE_NAMESPACE=notset} in
 
-    'stp-froms-dev')
+    'stp-forms-dev')
         export INTERNAL_URL=".dev.internal.stp-notprod.homeoffice.gov.uk"
         export EXTERNAL_URL=".dev.stp-notprod.homeoffice.gov.uk"
         export SERVICE_REPLICAS=1
