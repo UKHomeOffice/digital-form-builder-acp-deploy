@@ -29,6 +29,12 @@ spec:
               port: {{ .PORT }}
             initialDelaySeconds: 30
             periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health-check
+              port: {{ .PORT }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
           resources:
             limits:
               cpu: 500m
@@ -43,6 +49,8 @@ spec:
               value: "{{ .PREVIEW_URL }}"
             - name: PUBLISH_URL
               value: "{{ .PUBLISH_URL }}"
+            - name: FOOTER_TEXT
+              value: "A Home Office Digital, Data and Technology service"
           securityContext:
             runAsNonRoot: true
           ports:
