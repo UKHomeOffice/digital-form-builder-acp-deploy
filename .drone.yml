@@ -45,7 +45,7 @@ steps:
       IMAGE_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/stp/forms-designer
       KUBE_NAMESPACE: stp-forms-dev
       KUBE_TOKEN_ACP_NOTPROD:
-        from_secret: kube_token_acp_notprod
+        from_secret: forms-designer-kube-token
       PREVIEW_MODE: true
       PREVIEW_URL: https://form-builder.dev.stp-notprod.homeoffice.gov.uk
       PUBLISH_URL: https://form-builder.dev.internal.stp-notprod.homeoffice.gov.uk
