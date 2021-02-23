@@ -3,7 +3,6 @@
 export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/${DRONE_DEPLOY_TO=notset}.crt
 
 export IMAGE_VERSION=${DESIGNER_TAG=${DRONE_COMMIT_SHA=notset}}
-
 case ${DRONE_DEPLOY_TO} in
 
 'acp-prod')
