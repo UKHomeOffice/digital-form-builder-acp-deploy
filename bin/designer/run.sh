@@ -25,7 +25,7 @@ case ${ACTION} in
       -f kube/designer/deployment-app.yaml \
       -f kube/designer/ingress-app-external.yaml \
       -f kube/designer/ingress-app-internal.yaml \
-      -f kube/designer/networkpolicy-app-external.yaml |
+      -f kube/designer/networkpolicy-app-external.yaml \
       -f kube/designer/networkpolicy-app-internal.yaml ;;
 
   'destroy')
