@@ -11,6 +11,7 @@ info "Kube Namespace: ${KUBE_NAMESPACE}"
 info "App Release Version: ${APP_VERSION}"
 info "PARENT JOB NUMBER: ${DRONE_BUILD_PARENT}"
 info "XGOV TAG: ${XGOV_TAG}"
+info "DESIGNER TAG: ${DESIGNER_TAG}"
 info "IMAGE_VERSION: ${IMAGE_VERSION}"
 info "---"
 
