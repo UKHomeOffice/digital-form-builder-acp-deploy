@@ -1,34 +1,51 @@
 #!/usr/bin/env bash
-[[ -z "${DEBUG}" ]] || set -x
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source /drone/src/bin/util.sh || exit 1
 
-info "---"
-info "Kube Environment: ${DRONE_DEPLOY_TO}"
-info "Kube API URL: ${KUBE_SERVER}"
-info "Kube Namespace: ${KUBE_NAMESPACE}"
-info "App Release Version: ${APP_VERSION}"
-info "PARENT JOB NUMBER: ${DRONE_BUILD_PARENT}"
-info "XGOV TAG: ${XGOV_TAG}"
-info "---"
+export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/${DRONE_DEPLOY_TO=notset}.crt
 
-case ${ACTION} in
-  'deploy')
-    info "Deploying the Digital Form Builder- Designer"
-    kd --timeout 10m0s \
-      -f kube/designer/service-app-tls.yaml \
-      -f kube/designer/service-app.yaml \
-      -f kube/designer/deployment-app.yaml \
-      -f kube/designer/ingress-app-external.yaml \
-      -f kube/designer/ingress-app-internal.yaml \
-      -f kube/designer/networkpolicy-app.yaml ;;
+export IMAGE_VERSION=${XGOV_TAG=${DRONE_COMMIT_SHA=notset}}
 
-  'destroy')
-    warning "Destroying resources related to the Digital Form Builder- Designer (excluding secrets, ingress)"
-    kd run delete service ${DEPLOYMENT_NAME} --ignore-not-found
-    kd run delete deployment ${DEPLOYMENT_NAME} --ignore-not-found
-    kd run delete networkpolicy ${DEPLOYMENT_NAME} --ignore-not-found ;;
+case ${DRONE_DEPLOY_TO} in
 
-  *)
-    failed "Action '${ACTION}' is invalid, make sure 'ACTION' is set correctly ('deploy' or 'destroy')." ;;
+'acp-prod')
+    export KUBE_SERVER="https://kube-api-prod.prod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_PROD=notset}
+    export INTERNAL_URL=".internal.stp-prod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".stp-prod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export UPTIME='Mon-Sun 00:00-00:00 Europe/London'
+   ;;
+
+'acp-notprod')
+
+    export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
+    export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
+
+    case ${KUBE_NAMESPACE=notset} in
+
+    'stp-froms-dev')
+        export INTERNAL_URL=".dev.internal.stp-notprod.homeoffice.gov.uk"
+        export EXTERNAL_URL=".dev.stp-notprod.homeoffice.gov.uk"
+        export SERVICE_REPLICAS=1
+        ;;
+
+    'stp-forms-test')
+        export INTERNAL_URL=".test.internal.stp-notprod.homeoffice.gov.uk"
+        export EXTERNAL_URL=".test.stp-notprod.homeoffice.gov.uk"
+        export SERVICE_REPLICAS=1
+        ;;
+
+    'stp-forms-preprod')
+        export INTERNAL_URL=".preprod.internal.stp-notprod.homeoffice.gov.uk"
+        export EXTERNAL_URL=".preprod.stp-notprod.homeoffice.gov.uk"
+        export SERVICE_REPLICAS=1
+        ;;
+    *)
+        failed "Namespace '${KUBE_NAMESPACE}' is invalid, make sure 'KUBE_NAMESPACE' is set correctly."
+    ;;
+    esac
+    ;;
+*)
+    failed "Environment '${DRONE_DEPLOY_TO}' is invalid, make sure 'DRONE_DEPLOY_TO' is set correctly."
+;;
 esac

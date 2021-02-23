@@ -8,50 +8,47 @@ platform:
   arch: amd64
 
 steps:
-  - name: setup tags
+  - name: deploy-runner
     pull: if-not-exists
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+    image: quay.io/ukhomeofficedigital/kd:v1.16.0
     commands:
-      - echo ${XGOV_TAG}
-  # - name: deploy-runner
-  #   pull: if-not-exists
-  #   image: quay.io/ukhomeofficedigital/kd:v1.16.0
-  #   commands:
-  #     - apk add -U curl git
-  #     - git fetch origin
-  #     - git reset --hard origin/$${BRANCH}
-  #     - git checkout $${BRANCH}
-  #     - bin/runner/run.sh
-  #   environment:
-  #     ACTION: deploy
-  #     BRANCH: main
-  #     KUBE_TOKEN_ACP_NOTPROD:
-  #       from_secret: kube_token_acp_notprod
-  #     KUBE_TOKEN_ACP_PROD:
-  #       from_secret: kube_token_acp_prod
-  #     KUBE_TOKEN_ACP_TEST:
-  #       from_secret: kube_token_acp_test
-  #   when:
-  #     event:
-  #       - promote
-  # - name: deploy-designer
-  #   pull: if-not-exists
-  #   image: quay.io/ukhomeofficedigital/kd:v1.16.0
-  #   commands:
-  #     - apk add -U curl git
-  #     - git fetch origin
-  #     - git reset --hard origin/$${BRANCH}
-  #     - git checkout $${BRANCH}
-  #     - bin/designer/run.sh
-  #   environment:
-  #     ACTION: deploy
-  #     BRANCH: main
-  #     KUBE_TOKEN_ACP_NOTPROD:
-  #       from_secret: kube_token_acp_notprod
-  #     KUBE_TOKEN_ACP_PROD:
-  #       from_secret: kube_token_acp_prod
-  #     KUBE_TOKEN_ACP_TEST:
-  #       from_secret: kube_token_acp_test
-  #   when:
-  #     event:
-  #       - promote
+      - apk add -U curl git
+      - git fetch origin
+      - git reset --hard origin/$${BRANCH}
+      - git checkout $${BRANCH}
+      - bin/runner/run.sh
+    environment:
+      ACTION: deploy
+      BRANCH: main
+      KUBE_TOKEN_ACP_NOTPROD:
+        from_secret: kube_token_acp_notprod
+      KUBE_TOKEN_ACP_PROD:
+        from_secret: kube_token_acp_prod
+      KUBE_TOKEN_ACP_TEST:
+        from_secret: kube_token_acp_test
+    when:
+      event:
+        - promote
+  - name: deploy-designer
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd:v1.16.0
+    commands:
+      - apk add -U curl git
+      - git fetch origin
+      - git reset --hard origin/$${BRANCH}
+      - git checkout $${BRANCH}
+      - bin/designer/run.sh
+    environment:
+      ACTION: deploy
+      BRANCH: main
+      DRONE_DEPLOY_TO: acp-notprod
+      IMAGE_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/stp/forms-designer
+      KUBE_NAMESPACE: stp-forms-dev
+      KUBE_TOKEN_ACP_NOTPROD:
+        from_secret: kube_token_acp_notprod
+      PREVIEW_MODE: true
+      PREVIEW_URL: https://form-builder.dev.stp-notprod.homeoffice.gov.uk
+      PUBLISH_URL: https://form-builder.dev.internal.stp-notprod.homeoffice.gov.uk
+    when:
+      event:
+        - promote

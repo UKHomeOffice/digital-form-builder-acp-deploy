@@ -13,6 +13,9 @@ info "PARENT JOB NUMBER: ${DRONE_BUILD_PARENT}"
 info "XGOV TAG: ${XGOV_TAG}"
 info "---"
 
+export NAME="forms-designer"
+export PORT=3000
+
 case ${ACTION} in
   'deploy')
     info "Deploying the Digital Form Builder - Designer"
@@ -22,7 +25,8 @@ case ${ACTION} in
       -f kube/designer/deployment-app.yaml \
       -f kube/designer/ingress-app-external.yaml \
       -f kube/designer/ingress-app-internal.yaml \
-      -f kube/designer/networkpolicy-app.yaml ;;
+      -f kube/designer/networkpolicy-app-external.yaml |
+      -f kube/designer/networkpolicy-app-internal.yaml ;;
 
   'destroy')
     warning "Destroying resources related to the Digital Form Builder- Designer (excluding secrets, ingress)"
