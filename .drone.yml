@@ -21,7 +21,7 @@ steps:
       ACTION: deploy
       BRANCH: main
       KUBE_TOKEN_ACP_NOTPROD:
-        from_secret: kube_token_acp_notprod
+        from_secret: forms-runner-kube-token
       KUBE_TOKEN_ACP_PROD:
         from_secret: kube_token_acp_prod
       KUBE_TOKEN_ACP_TEST:
