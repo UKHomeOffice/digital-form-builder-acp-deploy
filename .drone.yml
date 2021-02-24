@@ -50,8 +50,8 @@ steps:
       KUBE_TOKEN_ACP_NOTPROD:
         from_secret: forms-designer-kube-token
       PREVIEW_MODE: true
-      PREVIEW_URL: https://forms-runner.dev.stp-forms-notprod.homeoffice.gov.uk
-      PUBLISH_URL: https://forms-runner.dev.internal.stp-forms-notprod.homeoffice.gov.uk
+      PREVIEW_URL: https://runner-preview.dev.stp-forms-notprod.homeoffice.gov.uk
+      PUBLISH_URL: https://runner-preview.dev.internal.stp-forms-notprod.homeoffice.gov.uk
     when:
       event:
         - promote

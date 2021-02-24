@@ -7,7 +7,7 @@ source /drone/src/bin/runner/env.sh || exit 1
 export DOCUMENT_UPLOAD_SERVICE_NAME="form-doc-upload"
 export SUBMISSION_SERVICE_NAME="form-submission"
 export PORT=3009
-export NAME="forms-runner"
+export NAME="runner-preview"
 
 info "---"
 info "Kube Environment: ${DRONE_DEPLOY_TO}"

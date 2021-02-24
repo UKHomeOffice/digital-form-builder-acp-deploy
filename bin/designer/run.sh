@@ -14,7 +14,7 @@ info "DESIGNER TAG: ${DESIGNER_TAG}"
 info "IMAGE_VERSION: ${IMAGE_VERSION}"
 info "---"
 
-export NAME="forms-designer"
+export NAME="designer"
 export PORT=3000
 
 case ${ACTION} in

@@ -33,8 +33,8 @@ case ${DRONE_DEPLOY_TO} in
     export SERVICE_REPLICAS=1
     export KUBE_NAMESPACE="stp-forms-test"
     export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
-    export PREVIEW_URL: https://forms-runner.test.stp-forms-notprod.homeoffice.gov.uk
-    export PUBLISH_URL: https://forms-runner.test.internal.stp-forms-notprod.homeoffice.gov.uk
+    export PREVIEW_URL: https://runner-preview.test.stp-forms-notprod.homeoffice.gov.uk
+    export PUBLISH_URL: https://runner-preview.test.internal.stp-forms-notprod.homeoffice.gov.uk
         ;;
 
 'preprod')
@@ -46,8 +46,8 @@ case ${DRONE_DEPLOY_TO} in
     export SERVICE_REPLICAS=1
     export KUBE_NAMESPACE="stp-forms-preprod"
     export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
-    export PREVIEW_URL: https://forms-runner.preprod.stp-forms-notprod.homeoffice.gov.uk
-    export PUBLISH_URL: https://forms-runner.preprod.internal.stp-forms-notprod.homeoffice.gov.uk
+    export PREVIEW_URL: https://runner-preview.preprod.stp-forms-notprod.homeoffice.gov.uk
+    export PUBLISH_URL: https://runner-preview.preprod.internal.stp-forms-notprod.homeoffice.gov.uk
         ;;
     *)
     failed "Environment '${DRONE_DEPLOY_TO}' is invalid, make sure 'DRONE_DEPLOY_TO' is set correctly."
