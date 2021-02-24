@@ -10,7 +10,6 @@ info "Kube API URL: ${KUBE_SERVER}"
 info "Kube Namespace: ${KUBE_NAMESPACE}"
 info "App Release Version: ${APP_VERSION}"
 info "PARENT JOB NUMBER: ${DRONE_BUILD_PARENT}"
-info "XGOV TAG: ${XGOV_TAG}"
 info "DESIGNER TAG: ${DESIGNER_TAG}"
 info "IMAGE_VERSION: ${IMAGE_VERSION}"
 info "---"
@@ -22,8 +21,13 @@ case ${ACTION} in
   'deploy')
     info "Deploying the Digital Form Builder - Designer"
     kd --timeout 10m0s \
+      -f kube/designer/service-app-tls.yaml \
       -f kube/designer/service-app.yaml \
-      -f kube/designer/deployment-app.yaml ;;
+      -f kube/designer/deployment-app.yaml \
+      -f kube/designer/ingress-app-external.yaml \
+      -f kube/designer/ingress-app-internal.yaml \
+      -f kube/designer/networkpolicy-app-external.yaml \
+      -f kube/designer/networkpolicy-app-internal.yaml ;;
 
   'destroy')
     warning "Destroying resources related to the Digital Form Builder- Designer (excluding secrets, ingress)"

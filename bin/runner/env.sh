@@ -1,34 +1,51 @@
 #!/usr/bin/env bash
-[[ -z "${DEBUG}" ]] || set -x
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source /drone/src/bin/util.sh || exit 1
+export IMAGE_VERSION=${RUNNER_TAG=${DRONE_TAG=latest}}
+case ${DRONE_DEPLOY_TO} in
 
-info "---"
-info "Kube Environment: ${DRONE_DEPLOY_TO}"
-info "Kube API URL: ${KUBE_SERVER}"
-info "Kube Namespace: ${KUBE_NAMESPACE}"
-info "App Release Version: ${APP_VERSION}"
-info "PARENT JOB NUMBER: ${DRONE_BUILD_PARENT}"
-info "XGOV TAG: ${XGOV_TAG}"
-info "---"
+'prod')
+    export KUBE_SERVER="https://kube-api-prod.prod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_PROD=notset}
+    export INTERNAL_URL=".internal.stp-prod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".stp-prod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export UPTIME='Mon-Sun 00:00-00:00 Europe/London'
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-prod.crt
+   ;;
 
-case ${ACTION} in
-  'deploy')
-    info "Deploying the Digital Form Builder -Runner"
-    kd --timeout 10m0s \
-      -f kube/runner/service-app-tls.yaml \
-      -f kube/runner/service-app.yaml \
-      -f kube/runner/deployment-app.yaml \
-      -f kube/runner/ingress-app-external.yaml \
-      -f kube/runner/ingress-app-internal.yaml \
-      -f kube/runner/networkpolicy-app.yaml ;;
+'development')
 
-  'destroy')
-    warning "Destroying resources related to the Digital Form Builder -Runner (excluding secrets, ingress)"
-    kd run delete service ${DEPLOYMENT_NAME} --ignore-not-found
-    kd run delete deployment ${DEPLOYMENT_NAME} --ignore-not-found
-    kd run delete networkpolicy ${DEPLOYMENT_NAME} --ignore-not-found ;;
+    export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
+    export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
+    export INTERNAL_URL=".dev.internal.stp-notprod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".dev.stp-notprod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export KUBE_NAMESPACE="stp-forms-dev"
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
+        ;;
+      
+'test')
+    export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
+    export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
+    export INTERNAL_URL=".test.internal.stp-notprod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".test.stp-notprod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export KUBE_NAMESPACE="stp-forms-test"
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
+        ;;
 
-  *)
-    failed "Action '${ACTION}' is invalid, make sure 'ACTION' is set correctly ('deploy' or 'destroy')." ;;
+'preprod')
+    export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
+    export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
+    export INTERNAL_URL=".preprod.internal.stp-notprod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".preprod.stp-notprod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export KUBE_NAMESPACE="stp-forms-preprod"
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
+        ;;
+    *)
+    failed "Environment '${DRONE_DEPLOY_TO}' is invalid, make sure 'DRONE_DEPLOY_TO' is set correctly."
+;;
 esac

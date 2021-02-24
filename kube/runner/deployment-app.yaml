@@ -1,156 +1,60 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .DEPLOYMENT_NAME }}
+  name: {{ .NAME }}
+  labels:
+    project: stp
+  annotations:
+    downscaler/uptime: {{ .UPTIME }}
 spec:
-  replicas: {{ .REPLICAS }}
+  replicas: {{ .SERVICE_REPLICAS }}
   selector:
     matchLabels:
-      name: {{ .DEPLOYMENT_NAME }}
-  strategy:
-    type: RollingUpdate
+      app: {{ .NAME }}
   template:
     metadata:
       labels:
-        name: {{ .DEPLOYMENT_NAME }}
+        project: stp
+        name: {{ .NAME }}
+        app: {{ .NAME }}
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                  - key: name
-                    operator: In
-                    values:
-                      - {{ .DEPLOYMENT_NAME }}
-      imagePullSecrets:
-        - name: registrykey
-      securityContext:
-        fsGroup: 1000
-        runAsNonRoot: true
       containers:
-        - name: {{ .DEPLOYMENT_NAME }}
-          image: {{ .APP_IMAGE }}:{{ .APP_VERSION }}
-          resources:
-            limits:
-              cpu: 100m
-              memory: 300Mi
-            requests:
-              cpu: 10m
-              memory: 100Mi
+        - name: {{ .NAME }}
+          image: {{ .IMAGE_URL }}:{{ .IMAGE_VERSION }}
+          imagePullPolicy: Always
           livenessProbe:
-            httpGet:
-              path: /
-              port: 3000
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 60
-            timeoutSeconds: 5
+           httpGet:
+             path: /
+             port: {{ .PORT }}
+           initialDelaySeconds: 30
+           periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /health-check
-              port: 3000
-              scheme: HTTP
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-        - name: nginx-proxy
-          image: {{ .NGINX_IMAGE }}:{{ .NGINX_VERSION }}
+              port: {{ .PORT }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
           resources:
             limits:
-              cpu: 100m
-              memory: 100Mi
+              cpu: 2
+              memory: 2048Mi
             requests:
-              cpu: 10m
-              memory: 10Mi
+              cpu: 1
+              memory: 1024Mi
           env:
-            - name: HTTPS_LISTEN_PORT
-              value: "10444"
-            - name: ERROR_REDIRECT_CODES
-              value: "599"
-            - name: NAXSI_USE_DEFAULT_RULES
-              value: "FALSE"
-            - name: PORT_IN_HOST_HEADER
-              value: "FALSE"
-            - name: PROXY_SERVICE_HOST
-              value: 127.0.0.1
-            - name: PROXY_SERVICE_PORT
-              value: "3000"
-            - name: SERVER_CERT
-              value: /certs/tls.crt
-            - name: SERVER_KEY
-              value: /certs/tls.key
-            - name: SSL_CIPHERS
-              value: ECDHE-RSA-AES128-GCM-SHA256:AES256+EECDH:AES256+EDH:!aNULL
-          ports:
-            - name: https
-              containerPort: 10444
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 10444
-              scheme: HTTPS
-            initialDelaySeconds: 5
-            periodSeconds: 60
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 10444
-              scheme: HTTPS
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-          volumeMounts:
-            - mountPath: /certs
-              name: certs
-              readOnly: true
-            - name: bundle
-              mountPath: /etc/ssl/certs
-              readOnly: true
-        {{- if eq .ENABLE_KEYCLOAK "true"}}
-        - name: keycloak-gatekeeper
-          image: {{ .KEYCLOAK_IMAGE }}:{{ .KEYCLOAK_VERSION }}
-          ports:
-              - containerPort: 10443
-                name: https
-                protocol: TCP
-          env:
-            - name: PROXY_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: client_secret
-                  name: gatekeeper
-          args:
-            - --listen=:10443
-            - --client-id=gatekeeper
-            - --discovery-url={{ .KEYCLOAK_URL }}
-            - --upstream-url=https://127.0.0.1:10444
-            - --tls-cert=/certs/tls.crt
-            - --tls-private-key=/certs/tls.key
-            - --resources=uri=/*|roles=users
-            - --resources=uri=/admin/*|roles=admin
-          resources:
-            limits:
-              memory: 100Mi
-            requests:
-              memory: 50Mi
+            - name: PREVIEW_MODE
+              value: "{{ .PREVIEW_MODE }}"
+            - name: DOCUMENT_UPLOAD_API_URL
+              value: "https://{{ .DOCUMENT_UPLOAD_SERVICE_NAME }}{{ .INTERNAL_URL }}"
+            - name: SUBMISSION_API_URL
+              value: "https://{{ .SUBMISSION_SERVICE_NAME }}{{ .INTERNAL_URL }}"
+            - name: NOTIFY_API_KEY
+              value: "{{ .GOV_UK_NOTIFY_DEFAULT_API_KEY }}"
+            - name: NOTIFY_TEMPLATE_ID
+              value: "{{ .GOV_UK_NOTIFY_DEFAULT_TEMPLATE_ID }}"  
           securityContext:
-            procMount: Default
             runAsNonRoot: true
-            runAsUser: 1000
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /certs
-              name: certs
-            - mountPath: /etc/ssl/certs
-              name: bundle
-              readOnly: true
-        {{- end }}
-      volumes:
-        - name: certs
-          secret:
-            secretName: {{ .DEPLOYMENT_NAME }}-service-tls-cmio
-        - name: bundle
-        configMap:
-          name: bundle
+          ports:
+            - containerPort: {{ .PORT }}
+...

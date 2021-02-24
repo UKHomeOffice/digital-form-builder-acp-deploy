@@ -8,27 +8,32 @@ platform:
   arch: amd64
 
 steps:
-  # - name: deploy-runner
-  #   pull: if-not-exists
-  #   image: quay.io/ukhomeofficedigital/kd:v1.16.0
-  #   commands:
-  #     - apk add -U curl git
-  #     - git fetch origin
-  #     - git reset --hard origin/$${BRANCH}
-  #     - git checkout $${BRANCH}
-  #     - bin/runner/run.sh
-  #   environment:
-  #     ACTION: deploy
-  #     BRANCH: main
-  #     KUBE_TOKEN_ACP_NOTPROD:
-  #       from_secret: kube_token_acp_notprod
-  #     KUBE_TOKEN_ACP_PROD:
-  #       from_secret: kube_token_acp_prod
-  #     KUBE_TOKEN_ACP_TEST:
-  #       from_secret: kube_token_acp_test
-  #   when:
-  #     event:
-  #       - promote
+  - name: deploy-runner
+    pull: if-not-exists
+    image: quay.io/ukhomeofficedigital/kd:v1.16.0
+    commands:
+      - apk add -U curl git
+      - git fetch origin
+      - git reset --hard origin/$${BRANCH}
+      - git checkout $${BRANCH}
+      - bin/runner/run.sh
+    environment:
+      ACTION: deploy
+      BRANCH: main
+      KUBE_TOKEN_ACP_NOTPROD:
+        from_secret: kube_token_acp_notprod
+      KUBE_TOKEN_ACP_PROD:
+        from_secret: kube_token_acp_prod
+      KUBE_TOKEN_ACP_TEST:
+        from_secret: kube_token_acp_test
+      PREVIEW_MODE: true
+      GOV_UK_NOTIFY_DEFAULT_API_KEY:
+        from_secret: NOTIFY_API_KEY
+      GOV_UK_NOTIFY_DEFAULT_TEMPLATE_ID: 2d2a640b-db7f-4eb8-8b41-e5d75fc64b64
+      IMAGE_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/stp/forms-runner
+    when:
+      event:
+        - promote
   - name: deploy-designer
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd:v1.16.0
@@ -42,7 +47,6 @@ steps:
       ACTION: deploy
       BRANCH: main
       IMAGE_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/stp/forms-designer
-      KUBE_NAMESPACE: stp-forms-dev
       KUBE_TOKEN_ACP_NOTPROD:
         from_secret: forms-designer-kube-token
       PREVIEW_MODE: true
