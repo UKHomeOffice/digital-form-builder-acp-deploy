@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: default
+name: runner
 type: kubernetes
 
 platform:
@@ -34,6 +34,15 @@ steps:
     when:
       event:
         - promote
+---
+kind: pipeline
+name: designer
+type: kubernetes
+
+platform:
+  os: linux
+  arch: amd64
+steps:
   - name: deploy-designer
     pull: if-not-exists
     image: quay.io/ukhomeofficedigital/kd:v1.16.0
