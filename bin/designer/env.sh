@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-
-export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/${DRONE_DEPLOY_TO=notset}.crt
-
 export IMAGE_VERSION=${DESIGNER_TAG=${DRONE_TAG=latest}}
 case ${DRONE_DEPLOY_TO} in
 
@@ -12,6 +9,7 @@ case ${DRONE_DEPLOY_TO} in
     export EXTERNAL_URL=".stp-prod.homeoffice.gov.uk"
     export SERVICE_REPLICAS=1
     export UPTIME='Mon-Sun 00:00-00:00 Europe/London'
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-prod.crt
    ;;
 
 'development')
@@ -23,6 +21,7 @@ case ${DRONE_DEPLOY_TO} in
     export EXTERNAL_URL=".dev.stp-notprod.homeoffice.gov.uk"
     export SERVICE_REPLICAS=1
     export KUBE_NAMESPACE="stp-forms-dev"
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
         ;;
       
 'test')
@@ -33,6 +32,7 @@ case ${DRONE_DEPLOY_TO} in
     export EXTERNAL_URL=".test.stp-notprod.homeoffice.gov.uk"
     export SERVICE_REPLICAS=1
     export KUBE_NAMESPACE="stp-forms-test"
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
         ;;
 
 'preprod')
@@ -43,6 +43,7 @@ case ${DRONE_DEPLOY_TO} in
     export EXTERNAL_URL=".preprod.stp-notprod.homeoffice.gov.uk"
     export SERVICE_REPLICAS=1
     export KUBE_NAMESPACE="stp-forms-preprod"
+    export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice/acp-ca/master/acp-notprod.crt
         ;;
     *)
     failed "Environment '${DRONE_DEPLOY_TO}' is invalid, make sure 'DRONE_DEPLOY_TO' is set correctly."
