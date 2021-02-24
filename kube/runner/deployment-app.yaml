@@ -24,11 +24,11 @@ spec:
           image: {{ .IMAGE_URL }}:{{ .IMAGE_VERSION }}
           imagePullPolicy: Always
           livenessProbe:
-           httpGet:
-             path: /
-             port: {{ .PORT }}
-           initialDelaySeconds: 30
-           periodSeconds: 30
+            httpGet:
+              path: /
+              port: {{ .PORT }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /health-check
