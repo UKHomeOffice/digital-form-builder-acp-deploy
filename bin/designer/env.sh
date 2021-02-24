@@ -5,7 +5,7 @@ export KUBE_CERTIFICATE_AUTHORITY=https://raw.githubusercontent.com/UKHomeOffice
 export IMAGE_VERSION=${DESIGNER_TAG=${DRONE_TAG=latest}}
 case ${DRONE_DEPLOY_TO} in
 
-'acp-prod')
+'prod')
     export KUBE_SERVER="https://kube-api-prod.prod.acp.homeoffice.gov.uk"
     export KUBE_TOKEN=${KUBE_TOKEN_ACP_PROD=notset}
     export INTERNAL_URL=".internal.stp-prod.homeoffice.gov.uk"
@@ -14,37 +14,37 @@ case ${DRONE_DEPLOY_TO} in
     export UPTIME='Mon-Sun 00:00-00:00 Europe/London'
    ;;
 
-'acp-notprod')
+'development')
 
     export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
     export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
     export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
-
-    case ${KUBE_NAMESPACE=notset} in
-
-    'stp-forms-dev')
-        export INTERNAL_URL=".dev.internal.stp-notprod.homeoffice.gov.uk"
-        export EXTERNAL_URL=".dev.stp-notprod.homeoffice.gov.uk"
-        export SERVICE_REPLICAS=1
+    export INTERNAL_URL=".dev.internal.stp-notprod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".dev.stp-notprod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export KUBE_NAMESPACE="stp-forms-dev"
+        ;;
+      
+'test')
+    export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
+    export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
+    export INTERNAL_URL=".test.internal.stp-notprod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".test.stp-notprod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export KUBE_NAMESPACE="stp-forms-test"
         ;;
 
-    'stp-forms-test')
-        export INTERNAL_URL=".test.internal.stp-notprod.homeoffice.gov.uk"
-        export EXTERNAL_URL=".test.stp-notprod.homeoffice.gov.uk"
-        export SERVICE_REPLICAS=1
-        ;;
-
-    'stp-forms-preprod')
-        export INTERNAL_URL=".preprod.internal.stp-notprod.homeoffice.gov.uk"
-        export EXTERNAL_URL=".preprod.stp-notprod.homeoffice.gov.uk"
-        export SERVICE_REPLICAS=1
+'preprod')
+    export KUBE_SERVER="https://kube-api-notprod.notprod.acp.homeoffice.gov.uk"
+    export KUBE_TOKEN=${KUBE_TOKEN_ACP_NOTPROD=notset}
+    export UPTIME='Mon-Fri 08:00-22:00 Europe/London'
+    export INTERNAL_URL=".preprod.internal.stp-notprod.homeoffice.gov.uk"
+    export EXTERNAL_URL=".preprod.stp-notprod.homeoffice.gov.uk"
+    export SERVICE_REPLICAS=1
+    export KUBE_NAMESPACE="stp-forms-preprod"
         ;;
     *)
-        failed "Namespace '${KUBE_NAMESPACE}' is invalid, make sure 'KUBE_NAMESPACE' is set correctly."
-    ;;
-    esac
-    ;;
-*)
     failed "Environment '${DRONE_DEPLOY_TO}' is invalid, make sure 'DRONE_DEPLOY_TO' is set correctly."
 ;;
 esac
