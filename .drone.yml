@@ -34,6 +34,31 @@ steps:
     when:
       event:
         - promote
+  - name: slack-notification-runner-deployed
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: stp-formbuilder-alerts
+      template: >
+        {{#success build.status}}
+          runner deployment successful. Good job.
+          Environment: {{DRONE_DEPLOY_TO}}
+          Author: {{build.author}}
+          Link: {{build.link}}
+        {{else}}
+          runner deployment failed. Fix me please.
+          Environment: {{DRONE_DEPLOY_TO}}
+          Author: {{build.author}}
+          Link: {{build.link}}
+        {{/success}}
+    when:
+      status:
+        - success
+        - failure
+    depends_on:
+      - deploy-designer
+
 ---
 kind: pipeline
 name: designer
