@@ -27,6 +27,7 @@ case ${ACTION} in
       -f kube/runner/service-app.yaml \
       -f kube/runner/deployment-app.yaml \
       -f kube/runner/ingress-app-external.yaml \
+      -f kube/runner/ingress-app-internal.yaml \
       -f kube/runner/networkpolicy-app-external.yaml \
       -f kube/runner/networkpolicy-app-internal.yaml ;;
 
