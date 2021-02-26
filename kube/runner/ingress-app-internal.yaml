@@ -12,6 +12,7 @@ metadata:
 spec:
   tls:
     - hosts:
+        - runner{{ .INTERNAL_URL }}
         - {{ .NAME }}{{ .INTERNAL_URL }}
       secretName: {{ .NAME }}-internal
   rules:
