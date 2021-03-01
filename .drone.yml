@@ -28,7 +28,7 @@ steps:
         from_secret: kube_token_acp_test
       PREVIEW_MODE: true
       GOV_UK_NOTIFY_DEFAULT_API_KEY:
-        from_secret: NOTIFY_API_KEY
+        from_secret: MOCK_NOTIFY_API_KEY
       GOV_UK_NOTIFY_DEFAULT_TEMPLATE_ID: 2d2a640b-db7f-4eb8-8b41-e5d75fc64b64
       IMAGE_URL: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/stp/forms-runner
     when:
