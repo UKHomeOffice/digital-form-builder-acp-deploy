@@ -127,6 +127,8 @@ platform:
   arch: amd64
 steps:
   - name: smoke-tests
+    pull: if-not-exists
+    image: node:12.18.4-buster
     commands:
       - echo "Implement smoke tests steps"
     when:
