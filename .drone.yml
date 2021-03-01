@@ -117,3 +117,24 @@ steps:
         - failure
     depends_on:
       - deploy-designer
+
+---
+kind: pipeline
+name: smoke-tests
+type: kubernetes
+platform:
+  os: linux
+  arch: amd64
+steps:
+  - name: smoke-tests
+    commands:
+      - echo "Implement smoke tests steps"
+    when:
+      target:
+        - development
+        - test
+      event:
+        - promote
+depends_on:
+    - slack-notification-designer-deployed
+    - slack-notification-runner-deployed
