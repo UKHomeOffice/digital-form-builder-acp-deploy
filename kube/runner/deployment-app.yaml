@@ -52,7 +52,7 @@ spec:
             - name: NOTIFY_API_KEY
               value: "{{ .GOV_UK_NOTIFY_DEFAULT_API_KEY }}"
             - name: NOTIFY_TEMPLATE_ID
-              value: "{{ .GOV_UK_NOTIFY_DEFAULT_TEMPLATE_ID }}"  
+              value: "{{ .GOV_UK_NOTIFY_DEFAULT_TEMPLATE_ID }}"
           securityContext:
             runAsNonRoot: true
           ports:
