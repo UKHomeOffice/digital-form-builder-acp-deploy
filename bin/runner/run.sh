@@ -23,7 +23,6 @@ case ${ACTION} in
   'deploy')
     info "Deploying the Digital Form Builder - Runner"
     kd --timeout 10m0s \
-      -f kube/runner/service-app-tls.yaml \
       -f kube/runner/service-app.yaml \
       -f kube/runner/deployment-app.yaml \
       -f kube/runner/ingress-app-external.yaml \

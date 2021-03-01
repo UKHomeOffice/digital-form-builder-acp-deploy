@@ -21,7 +21,6 @@ case ${ACTION} in
   'deploy')
     info "Deploying the Digital Form Builder - Designer"
     kd --timeout 10m0s \
-      -f kube/designer/service-app-tls.yaml \
       -f kube/designer/service-app.yaml \
       -f kube/designer/deployment-app.yaml \
       -f kube/designer/ingress-app-external.yaml \
