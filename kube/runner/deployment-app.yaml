@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
-              path: /
+              path: /health-check
               port: {{ .PORT }}
             initialDelaySeconds: 30
             periodSeconds: 30
