@@ -141,6 +141,7 @@ steps:
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
     commands:
+      - bin/designer/run.sh
       - bin/get-app-url.sh
     depends_on:
       - checkout code from xgov
