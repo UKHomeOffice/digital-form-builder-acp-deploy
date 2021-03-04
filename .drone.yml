@@ -131,7 +131,10 @@ steps:
     image: alpine/git
     commands:
       - git clone https://github.com/XGovFormBuilder/digital-form-builder/
-      - bin/get-latest-tag.sh
+      - cd digital-form-builder
+      - git fetch --all --tags
+      - export TAG=${DESIGNER_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)}
+      - echo "TAG=$TAG"
       - git checkout $TAG -b master
       - cd ..
   - name: smoke-tests
