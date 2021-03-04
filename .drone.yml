@@ -131,8 +131,7 @@ steps:
     image: alpine/git
     commands:
       - git clone https://github.com/XGovFormBuilder/digital-form-builder/
-      - cd digital-form-builder
-      - ../bin/get-latest-tag.sh
+      - bin/get-latest-tag.sh
       - git checkout $TAG -b master
       - cd ..
   - name: smoke-tests
