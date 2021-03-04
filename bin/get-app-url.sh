@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+[[ -z "${DEBUG}" ]] || set -x
 
 case ${DRONE_DEPLOY_TO} in
 
