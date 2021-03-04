@@ -1,17 +1,14 @@
 #!/usr/bin/env sh
 [[ -z "${DEBUG}" ]] || set -x
 
-case ${DRONE_DEPLOY_TO} in
+if [ ${DRONE_DEPLOY_TO} == 'test' ]
+then
+   export APP_URL=https://designer.test.stp-forms-notprod.homeoffice.gov.uk
+else
+   export APP_URL=https://designer.dev.stp-forms-notprod.homeoffice.gov.uk
+   
+fi
 
-'development')
-    export APP_URL=https://designer.dev.stp-forms-notprod.homeoffice.gov.uk
-        ;;
-      
-'test')
-    export APP_URL=https://designer.test.stp-forms-notprod.homeoffice.gov.uk
-        ;;
-;;
-esac
 cd digital-form-builder/smoke-tests/designer/
 sed -i 's|http://localhost:3000|${APP_URL}|g' wdio.headless.conf.js
 
