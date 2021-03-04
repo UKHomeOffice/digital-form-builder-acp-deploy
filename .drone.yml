@@ -123,9 +123,6 @@ steps:
 kind: pipeline
 name: smoke-tests
 type: kubernetes
-platform:
-  os: linux
-  arch: amd64
 steps:
   - name: checkout code from xgov
     image: alpine/git
@@ -141,7 +138,6 @@ steps:
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
     commands:
-      - pwd
       - bin/get-app-url.sh
     depends_on:
       - checkout code from xgov
