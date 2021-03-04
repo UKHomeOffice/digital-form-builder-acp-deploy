@@ -142,6 +142,7 @@ steps:
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
     commands:
       - echo $${DRONE_DEPLOY_TO}
+      - echo ${target}
       - if $${DRONE_DEPLOY_TO}=='test' (export ST_ENV='dev') else (export ST_ENV='test')
       - export APP_URL=https://designer.${ST_ENV}.stp-forms-notprod.homeoffice.gov.uk
       - echo ${APP_URL}
