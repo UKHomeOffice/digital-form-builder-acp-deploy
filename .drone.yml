@@ -127,6 +127,14 @@ platform:
   os: linux
   arch: amd64
 steps:
+  - name: checkout code from xgov
+    image: alpine/git
+    commands:
+      - git clone https://github.com/XGovFormBuilder/digital-form-builder/
+      - cd digital-form-builder
+      - ../bin/get-latest-tag.sh
+      - git checkout $TAG -b master
+      - cd ..
   - name: smoke-tests
     pull: if-not-exists
     image: node:12.18.4-buster
@@ -138,6 +146,8 @@ steps:
         - test
       event:
         - promote
+    depends_on:
+      - checkout code from xgov
 depends_on:
-    - designer
-    - runner
+  - designer
+  - runner
