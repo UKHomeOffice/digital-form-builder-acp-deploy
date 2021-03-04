@@ -137,7 +137,9 @@ steps:
   - name: setup app url
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+    user: 0
     commands:
+      - chmod +x /drone/src/bin/get-app-url.sh
       - bin/get-app-url.sh
     depends_on:
       - checkout code from xgov
