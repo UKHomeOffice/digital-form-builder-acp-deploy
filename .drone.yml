@@ -141,14 +141,17 @@ steps:
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
     commands:
-      - /drone/src/bin/get-app-url.sh
+      - echo ${DRONE_DEPLOY_TO}
+      - if ${DRONE_DEPLOY_TO}=='test' (export ST_ENV='dev') else (export ST_ENV='test')
+      - export APP_URL=https://designer.${ST_ENV}.stp-forms-notprod.homeoffice.gov.uk
+      - echo ${APP_URL}
     depends_on:
       - checkout code from xgov
   - name: smoke-tests
     pull: if-not-exists
     image: node:12.18.4-buster
     commands:
-      - pwd
+      - cd digital-form-builder/smoke-tests/designer/
       - yarn
       - yarn smoke-test-headless
     depends_on:
