@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 case ${DRONE_DEPLOY_TO} in
 
