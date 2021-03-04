@@ -141,13 +141,9 @@ steps:
     pull: if-not-exists
     image: node:12.18.4-buster
     commands:
-      - echo "Implement smoke tests steps"
-    when:
-      target:
-        - development
-        - test
-      event:
-        - promote
+      - bin/get-app-url.sh
+      - yarn
+      - yarn smoke-test-headless
     depends_on:
       - checkout code from xgov
 depends_on:
