@@ -9,5 +9,3 @@ esac
 echo ${APP_URL}
 cd digital-form-builder/smoke-tests/designer/
 sed -i "s|http://localhost:3000|${APP_URL}|g" wdio.headless.conf.js
-
-head -5 wdio.headless.conf.js

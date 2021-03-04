@@ -134,6 +134,12 @@ steps:
       - echo "TAG=$TAG"
       - git checkout tags/$TAG -b smoketests
       - cd ..
+    when:
+      target:
+        - development
+        - test
+      event:
+        - promote
   - name: setup app url
     pull: if-not-exists
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
@@ -143,6 +149,12 @@ steps:
       - bin/get-app-url.sh
     depends_on:
       - checkout code from xgov
+    when:
+      target:
+        - development
+        - test
+      event:
+        - promote
   - name: smoke-tests
     pull: if-not-exists
     image: node:12.18.4-buster
