@@ -137,15 +137,22 @@ steps:
       - echo "TAG=$TAG"
       - git checkout tags/$TAG -b smoketests
       - cd ..
+  - name: setup app url
+    pull: if-not-exists
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+    commands:
+      - bin/get-app-url.sh
+    depends_on:
+      - checkout code from xgov
   - name: smoke-tests
     pull: if-not-exists
     image: node:12.18.4-buster
     commands:
-      - bin/get-app-url.sh
+      - pwd
       - yarn
       - yarn smoke-test-headless
     depends_on:
-      - checkout code from xgov
+      - setup app url
 depends_on:
   - designer
   - runner
