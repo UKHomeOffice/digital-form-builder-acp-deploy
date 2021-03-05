@@ -161,7 +161,7 @@ steps:
     commands:
       - cd digital-form-builder/smoke-tests/designer/
       - yarn
-      - yarn smoke-test-headless
+      - yarn smoke-test
     depends_on:
       - setup app url
     when:
@@ -170,6 +170,9 @@ steps:
         - test
       event:
         - promote
+services:
+  selenium:
+    image: selenium/standalone-chrome
 depends_on:
   - designer
   - runner

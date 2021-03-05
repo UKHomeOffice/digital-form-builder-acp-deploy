@@ -7,5 +7,6 @@ case "$DRONE_DEPLOY_TO" in
 esac
 
 echo ${APP_URL}
-cd digital-form-builder/smoke-tests/designer/
-sed -i "s|http://localhost:3000|${APP_URL}|g" wdio.headless.conf.js
+sed -i "s|http://localhost:3000|${APP_URL}|g" wdio.smoketests.conf.js
+
+mv wdio.smoketests.conf.js digital-form-builder/smoke-tests/designer/wdio.conf.js
