@@ -124,15 +124,6 @@ kind: pipeline
 name: smoke-tests
 type: kubernetes
 steps:
-  - name: check-selenium
-    pull: if-not-exists
-    image: bitnami/node:12
-    commands:
-      - echo 'checking if app is up and running'
-      - curl https://designer.dev.stp-forms-notprod.homeoffice.gov.uk/app/
-      - echo 'checking if app is up and running'
-      - curl https://designer.dev.internal.stp-forms-notprod.homeoffice.gov.uk/app/
-
   - name: checkout code from xgov
     image: alpine/git
     commands:

@@ -2,8 +2,8 @@
 [[ -z "${DEBUG}" ]] || set -x
 
 case "$DRONE_DEPLOY_TO" in
- test) export APP_URL=https://designer.test.stp-forms-notprod.homeoffice.gov.uk ;;
-    *) export APP_URL=https://designer.dev.stp-forms-notprod.homeoffice.gov.uk ;;
+ test) export APP_URL=https://designer.test.internal.stp-forms-notprod.homeoffice.gov.uk ;;
+    *) export APP_URL=https://designer.dev.internal.stp-forms-notprod.homeoffice.gov.uk ;;
 esac
 
 echo ${APP_URL}
