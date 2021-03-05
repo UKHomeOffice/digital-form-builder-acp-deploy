@@ -124,12 +124,6 @@ kind: pipeline
 name: smoke-tests
 type: kubernetes
 steps:
-  - name: check-selenium
-    pull: if-not-exists
-    image: bitnami/node:12
-    commands:
-      - echo 'checking if selenium service is up and running'
-      - curl http://selenium:4444/wd/hub/status
   - name: checkout code from xgov
     image: alpine/git
     commands:
