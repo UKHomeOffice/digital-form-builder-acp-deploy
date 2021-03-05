@@ -130,6 +130,8 @@ steps:
     commands:
       - echo 'checking if app is up and running'
       - curl https://designer.dev.stp-forms-notprod.homeoffice.gov.uk/app/
+      - echo 'checking if app is up and running'
+      - curl https://designer.dev.internal.stp-forms-notprod.homeoffice.gov.uk/app/
 
   - name: checkout code from xgov
     image: alpine/git
