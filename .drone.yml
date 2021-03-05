@@ -182,7 +182,7 @@ steps:
       event:
         - push
 services:
-  selenium:
+  - selenium:
     image: selenium/standalone-chrome
 depends_on:
   - designer
