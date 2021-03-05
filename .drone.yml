@@ -177,7 +177,7 @@ steps:
       event:
         - promote
 services:
-  - selenium:
+  - name: selenium
     image: selenium/standalone-chrome
 depends_on:
   - designer
