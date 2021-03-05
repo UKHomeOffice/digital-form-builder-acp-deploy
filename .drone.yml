@@ -124,7 +124,7 @@ kind: pipeline
 name: smoke-tests
 type: kubernetes
 steps:
-- name: check-selenium
+  - name: check-selenium
     pull: if-not-exists
     image: bitnami/node:12
     commands:
