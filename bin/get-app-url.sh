@@ -10,15 +10,14 @@ echo ${APP_URL}
 sed -i "s|http://localhost:3000|${APP_URL}|g" wdio.smoketests.conf.js
 
 mv wdio.smoketests.conf.js digital-form-builder/smoke-tests/designer/wdio.conf.js
-echo "Checking URLS"
+echo "Checking designer"
 curl -ivs designer.test.stp-forms-notprod.homeoffice.gov.uk
 if [ $? -ne 0 ]
 then echo "Designer is UP"
 else
 echo "Designer  is down"
 fi
-Runner:
-
+echo "Checking runner"
 curl -ivs runner-preview.test.stp-forms-notprod.homeoffice.gov.uk
 if [ $? -ne 0 ]
 then echo "Designer is UP"
