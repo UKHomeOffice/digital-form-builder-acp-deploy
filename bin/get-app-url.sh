@@ -10,3 +10,21 @@ echo ${APP_URL}
 sed -i "s|http://localhost:3000|${APP_URL}|g" wdio.smoketests.conf.js
 
 mv wdio.smoketests.conf.js digital-form-builder/smoke-tests/designer/wdio.conf.js
+
+
+curl  designer.test.stp-forms-notprod.homeoffice.gov.uk (POISE/ACP-TUNNEL ONLY) - Now working and available
+
+curl -ivs designer.test.stp-forms-notprod.homeoffice.gov.uk
+if [ $? -ne 0 ]
+then echo "Designer is UP"
+else
+echo "Designer  is down"
+fi
+Runner:
+
+curl -ivs runner-preview.test.stp-forms-notprod.homeoffice.gov.uk
+if [ $? -ne 0 ]
+then echo "Designer is UP"
+else
+echo "Designer  is down"
+fi
