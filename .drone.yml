@@ -168,6 +168,32 @@ steps:
         - test
       event:
         - promote
+  - name: slack-notification-smoke-tests
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: stp-formbuilder-alerts
+      template: >
+        {{#success build.status}}
+          Smoke tests successful. Good job.
+          Environment: {{build.deployTo}}
+          Author: {{build.author}}
+          Link: {{build.link}}
+        {{else}}
+          Smoke tests failed. Fix me please.
+          Environment: {{build.deployTo}}
+          Author: {{build.author}}
+          Link: {{build.link}}
+        {{/success}}
+    depends_on:
+      - smoke-tests
+    when:
+      event:
+        - promote
+      status:
+        - success
+        - failure
 services:
   - name: selenium
     image: selenium/standalone-chrome
