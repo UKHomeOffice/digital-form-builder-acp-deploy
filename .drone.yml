@@ -141,9 +141,7 @@ steps:
       event:
         - promote
   - name: setup app url
-    pull: if-not-exists
-    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-    user: 0
+    image: bitnami/node:12
     commands:
       - chmod +x /drone/src/bin/get-app-url.sh
       - bin/get-app-url.sh
