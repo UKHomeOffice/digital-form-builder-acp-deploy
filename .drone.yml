@@ -129,10 +129,9 @@ steps:
     commands:
       - git clone https://github.com/XGovFormBuilder/digital-form-builder/
       - cd digital-form-builder
-      - git fetch --all --tags
-      - export TAG=${DESIGNER_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)}
-      - echo "TAG=$TAG"
-      - git checkout tags/$TAG -b smoketests
+      - echo "Smoke tests SHA $XGOV_SHA"
+      - export SMOKE_TEST_SHA=${XGOV_SHA:-master}
+      - git checkout $SMOKE_TEST_SHA -b smoketests
       - cd ..
     when:
       target:
