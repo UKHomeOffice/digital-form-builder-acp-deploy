@@ -2,12 +2,15 @@
 [[ -z "${DEBUG}" ]] || set -x
 
 case "$DRONE_DEPLOY_TO" in
- test) export APP_URL=https://designer.test.stp-forms-notprod.homeoffice.gov.uk ;;
-    *) export APP_URL=https://designer.dev.stp-forms-notprod.homeoffice.gov.uk ;;
+ test)  export APP_URL=https://designer.test.stp-forms-notprod.homeoffice.gov.uk
+        export RUNNER_URL=https://runner-preview.test.stp-forms-notprod.homeoffice.gov.uk;;
+    *)  export APP_URL=https://designer.dev.stp-forms-notprod.homeoffice.gov.uk
+        export RUNNER_URL=https://runner-preview.dev.stp-forms-notprod.homeoffice.gov.uk;;
 esac
 
 echo ${APP_URL}
 sed -i "s|http://localhost:3000|${APP_URL}|g" wdio.smoketests.conf.js
+sed -i "s|http://localhost:3009|${RUNNER_URL}|g" wdio.smoketests.conf.js
 
 mv wdio.smoketests.conf.js digital-form-builder/smoke-tests/designer/wdio.conf.js
 echo " Checking external access -----------"
