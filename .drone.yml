@@ -130,7 +130,7 @@ steps:
       - git clone https://github.com/XGovFormBuilder/digital-form-builder/
       - cd digital-form-builder
       - echo "Smoke tests SHA $XGOV_SHA"
-      - export SMOKE_TEST_SHA=${XGOV_SHA:-master}
+      - export SMOKE_TEST_SHA=${XGOV_SHA:-main}
       - git checkout $SMOKE_TEST_SHA -b smoketests
       - cd ..
     when:
